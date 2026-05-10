@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Library Assistant</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+    <script src="https://www.paypal.com/sdk/js?client-id=ATYZLc7iR27GDe_pAWoHj1iFn6XlD3bihVfxk0aFtWiuOV85cOZ1T5QHJx-1W7WdoGRjST0fnThlmM2t&currency=USD"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Custom style for the active tab */
+        .tab-active { 
+            border-color: #3b82f6; /* blue-500 */
+            color: #1e3a8a; /* blue-900 */
+        }
+        .dark .tab-active {
+            border-color: #3b82f6; /* blue-500 */
+            color: #60a5fa; /* blue-400 */
+        }
+        .admin-tab-active { background-color: #3b82f6; color: white; }
+        #chat-widget { transition: all 0.3s ease-in-out; }
+    </style>
+
+    </head>
+<body class="bg-gray-50 dark:bg-gray-900 text-slate-800 dark:text-gray-200 flex items-center justify-center min-h-screen p-4 transition-colors duration-200">
+
+    <div class="container w-full max-w-4xl mx-auto">
+        
+        <main id="login-page" class="page bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg dark:border dark:border-gray-700 relative">
+            
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Automated Library Assistant</h1>
+                <p class="text-slate-500 dark:text-gray-400 mt-2">Please log in to access your dashboard.</p>
+            </div>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="user-id" class="block text-sm font-medium text-slate-700 dark:text-gray-300">User ID</label>
+                    <input type="text" id="user-id" placeholder="e.g., 21BCS001" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-slate-700 dark:text-gray-300">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">Login</button>
+                <p id="login-error" class="text-red-500 text-sm text-center h-4"></p>
+            </form>
+            <div class="text-center mt-4">
+                <button id="goto-forgot-password-btn" class="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">Forgot Password?</button>
+            </div>
+        </main>
+
+        <main id="forgot-password-page" class="page hidden bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg dark:border dark:border-gray-700 relative">
+            
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-slate-900 dark:text-white">Reset Password</h1>
+                <p class="text-slate-500 dark:text-gray-400 mt-2">Verify your identity to reset your password.</p>
+            </div>
+            <form id="forgot-password-form" class="space-y-6">
+                <div>
+                    <label for="forgot-user-id" class="block text-sm font-medium text-slate-700 dark:text-gray-300">User ID</label>
+                    <input type="text" id="forgot-user-id" placeholder="Enter your User ID" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                </div>
+                <div>
+                    <label for="forgot-email" class="block text-sm font-medium text-slate-700 dark:text-gray-300">Email Address</label>
+                    <input type="email" id="forgot-email" placeholder="Enter your registered email" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                </div>
+                <div>
+                    <label for="forgot-new-password" class="block text-sm font-medium text-slate-700 dark:text-gray-300">New Password</label>
+                    <input type="password" id="forgot-new-password" placeholder="Enter a new password" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">Reset Password</button>
+                <p id="forgot-password-status" class="text-sm text-center h-4"></p>
+            </form>
+            <div class="text-center mt-4">
+                <button id="goto-login-btn" class="text-sm font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">&larr; Back to Login</button>
+            </div>
+        </main>
+
+        <main id="dashboard-page" class="page hidden">
+            <header class="bg-white dark:bg-gray-800 p-6 rounded-t-2xl shadow-md dark:border-b dark:border-gray-700 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Library Portal</h1>
+                <div id="user-controls" class="flex items-center space-x-4">
+                    <span id="welcome-message" class="text-slate-600 dark:text-gray-300"></span>
+                    
+                    <button id="logout-btn" class="bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-300 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 dark:hover:bg-gray-600 transition-all">Logout</button>
+                </div>
+            </header>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-b-2xl shadow-lg dark:border dark:border-t-0 dark:border-gray-700">
+                <div class="border-b border-slate-200 dark:border-gray-700 mb-6">
+                    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+                        <button id="tab-books" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-900 dark:text-white">My Books</button>
+                        <button id="tab-recommendations" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-600">Recommendations</button>
+                        <button id="tab-settings" class="tab-button whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm text-slate-500 border-transparent hover:text-slate-700 hover:border-slate-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:border-gray-600">Settings</button>
+                    </nav>
+                </div>
+                <div id="content-books" class="tab-content space-y-8">
+                    
+                    <div class="flex space-x-4">
+                        <button id="goto-borrow-btn" class="flex-1 bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">Borrow a Book</button>
+                        <button id="goto-return-btn" class="flex-1 bg-slate-600 dark:bg-gray-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-slate-700 dark:hover:bg-gray-500 transition-all">Return a Book</button>
+                    </div>
+
+                    <div id="payment-alert-container" class="hidden">
+                        </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Your Current Loans</h3>
+                        <div id="current-books-list" class="space-y-4">
+                            </div>
+                    </div>
+                    <div id="history-accordion-container" class="hidden">
+                        <details id="history-accordion" class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <summary class="font-semibold text-slate-800 dark:text-white cursor-pointer">View Borrowing History</summary>
+                            <div id="history-books-list" class="mt-4 space-y-4">
+                                </div>
+                        </details>
+                    </div>
+                </div>
+                <div id="content-recommendations" class="tab-content hidden">
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Recommended for You</h3>
+                    <div id="recommendations-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+                        </div>
+                </div>
+                <div id="content-settings" class="tab-content hidden">
+                    <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4">Change Your Password</h3>
+                    <form id="change-password-form" class="space-y-4 max-w-md">
+                        <div>
+                            <label for="old-password" class="block text-sm font-medium text-slate-700 dark:text-gray-300">Old Password</label>
+                            <input type="password" id="old-password" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                        </div>
+                        <div>
+                            <label for="new-password" class="block text-sm font-medium text-slate-700 dark:text-gray-300">New Password</label>
+                            <input type="password" id="new-password" required class="mt-1 block w-full px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">Update Password</button>
+                        <p id="change-password-status" class="text-sm text-center h-4"></p>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <main id="transaction-page" class="page hidden bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg dark:border dark:border-gray-700">
+            <h2 id="transaction-title" class="text-2xl font-bold text-slate-900 dark:text-white mb-6"></h2>
+            <button class="back-btn mb-6 bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-300 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 dark:hover:bg-gray-600 transition-all">&larr; Back to Dashboard</button>
+            <div id="auth-step" class="text-center space-y-4">
+                <h3 class="text-lg font-semibold dark:text-white">Step 1: Authorize Transaction</h3>
+                <p id="auth-message" class="text-slate-500 dark:text-gray-400">Please scan your ID card at the library kiosk to proceed.</p>
+                <div class="spinner hidden h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600 mx-auto"></div>
+            </div>
+            <div id="book-step" class="hidden space-y-4">
+                <h3 class="text-lg font-semibold dark:text-white">Step 2: Identify Book</h3>
+                <div id="scanner-container" class="hidden w-full max-w-sm mx-auto p-4 bg-slate-900 rounded-lg">
+                    <div id="qr-reader" class="bg-white"></div>
+                    <button id="stop-scan-btn" class="mt-4 w-full bg-red-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-600 transition-all">Close Scanner</button>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <input type="text" id="book-id-input" placeholder="Enter Book ID or Scan" class="flex-grow px-4 py-3 bg-slate-50 dark:bg-gray-700 border border-slate-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-slate-900 dark:text-white dark:placeholder-gray-400">
+                    <button id="scan-btn" class="bg-slate-600 dark:bg-gray-600 text-white p-3 rounded-lg hover:bg-slate-700 dark:hover:bg-gray-500 transition-all" title="Scan with Camera">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h-1m-1-6v1m-5-1v1m-5 0v1m-1-6h-1m18 0h-1M4 12H3m18 0h-1m-1-6h-1m-5-1h-1M8 8v1m-5 5h1m2-8h1M8 4h1m8 16h1m-5-1h1m-1 5h1m-5-1h1M4 16h1m15 0h1m-6-5h1m-5-1h1" /></svg>
+                    </button>
+                </div>
+                <button id="confirm-transaction-btn" class="w-full bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg hover:bg-blue-700 transition-all">Confirm <span id="transaction-type"></span></button>
+                <div id="transaction-status" class="status-message mt-4"></div>
+            </div>
+        </main>
+        <main id="admin-auth-page" class="page hidden bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg dark:border dark:border-gray-700">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold text-slate-900 dark:text-white">Admin Verification Required</h2>
+                <p class="text-slate-500 dark:text-gray-400 mt-2 mb-8">Login successful. Please scan your admin RFID card at the kiosk to access the dashboard.</p>
+                <div class="spinner h-12 w-12 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600 mx-auto"></div>
+                <button id="admin-logout-btn" class="mt-8 text-sm text-slate-500 dark:text-gray-400 hover:underline">Cancel and Logout</button>
+            </div>
+        </main>
+        <main id="admin-dashboard-page" class="page hidden">
+            <header class="bg-white dark:bg-gray-800 p-6 rounded-t-2xl shadow-md dark:border-b dark:border-gray-700 flex justify-between items-center">
+                <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Admin Dashboard</h1>
+                <div id="admin-user-controls" class="flex items-center space-x-4">
+                    <span id="admin-welcome-message" class="text-slate-600 dark:text-gray-300"></span>
+                    
+                    <button id="admin-dashboard-logout-btn" class="bg-slate-200 dark:bg-gray-700 text-slate-700 dark:text-gray-300 font-semibold py-2 px-4 rounded-lg hover:bg-slate-300 dark:hover:bg-gray-600 transition-all">Logout</button>
+                </div>
+            </header>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-b-2xl shadow-lg dark:border dark:border-t-0 dark:border-gray-700">
+                <div class="mb-6">
+                    <div class="flex space-x-2 border-b dark:border-gray-700">
+                        <button id="admin-tab-overview" class="admin-tab-button py-2 px-4 font-medium text-sm rounded-t-lg">Overview</button>
+                        <button id="admin-tab-usermgmt" class="admin-tab-button py-2 px-4 font-medium text-sm rounded-t-lg">User Management</button>
+                        <button id="admin-tab-bookmgmt" class="admin-tab-button py-2 px-4 font-medium text-sm rounded-t-lg">Book Management</button>
+                    </div>
+                </div>
+                <div id="admin-content-overview" class="admin-tab-content space-y-8">
+                    <div>
+                        <h3 class="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            Due Date Alerts
+                        </h3>
+                        <div id="due-date-alerts-list" class="space-y-3"></div>
+                    </div>
+                    <div>
+                         <details class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                            <summary class="font-semibold text-slate-800 dark:text-white cursor-pointer">View All Currently Borrowed Books</summary>
+                            <div id="all-borrowed-books-list" class="mt-4 space-y-3"></div>
+                        </details>
+                    </div>
+                </div>
+                <div id="admin-content-usermgmt" class="admin-tab-content hidden space-y-6">
+                    <form id="add-user-form" class="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <h4 class="font-medium text-slate-800 dark:text-white">Add New User</h4>
+                        <input type="text" id="new-user-id" placeholder="User ID" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="text" id="new-user-name" placeholder="Full Name" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="password" id="new-user-password" placeholder="Password" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="email" id="new-user-email" placeholder="Email (for receipts/payments)" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="text" id="new-user-rfid" placeholder="RFID UID (Optional)" class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700">Add User</button>
+                        <p id="add-user-status" class="text-sm h-4"></p>
+                    </form>
+                    <form id="remove-user-form" class="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <h4 class="font-medium text-slate-800 dark:text-white">Deactivate User Account</h4>
+                        <input type="text" id="remove-user-id" placeholder="User ID to Deactivate" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <button type="submit" class="w-full bg-red-600 text-white font-medium py-2 rounded-md hover:bg-red-700">Deactivate User</button>
+                        <p id="remove-user-status" class="text-sm h-4"></p>
+                    </form>
+                    <form id="reissue-rfid-form" class="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <h4 class="font-medium text-slate-800 dark:text-white">Re-issue RFID Card</h4>
+                        <input type="text" id="reissue-user-id" placeholder="User ID to Verify" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="text" id="reissue-user-name" placeholder="User Name to Verify" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="text" id="reissue-new-rfid" placeholder="New RFID UID" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <button type="submit" class="w-full bg-orange-500 text-white font-medium py-2 rounded-md hover:bg-orange-600">Re-issue RFID</button>
+                        <p id="reissue-rfid-status" class="text-sm h-4"></p>
+                    </form>
+                </div>
+                <div id="admin-content-bookmgmt" class="admin-tab-content hidden space-y-6">
+                    <form id="add-book-form" class="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <h4 class="font-medium text-slate-800 dark:text-white">Add New Book</h4>
+                        <input type="text" id="new-book-id" placeholder="Book ID (ISBN)" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="text" id="new-book-title" placeholder="Book Title" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <input type="text" id="new-book-author" placeholder="Author" required class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <button type="submit" class="w-full bg-blue-600 text-white font-medium py-2 rounded-md hover:bg-blue-700">Add Book</button>
+                        <p id="add-book-status" class="text-sm h-4"></p>
+                    </form>
+                    <div class="space-y-3 p-4 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600">
+                        <h4 class="font-medium text-slate-800 dark:text-white">Search Book Status</h4>
+                        <input type="text" id="search-book-input" placeholder="Search by title..." class="w-full px-3 py-2 border rounded-md bg-white dark:bg-gray-600 dark:border-gray-500 dark:text-white">
+                        <div id="search-book-results" class="text-sm space-y-2 mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="chat-widget" class="fixed bottom-5 right-5 z-50 hidden">
+        <div id="chat-window" class="hidden w-80 h-96 bg-white dark:bg-gray-800 dark:border dark:border-gray-700 rounded-lg shadow-2xl flex flex-col mb-4 transition-all">
+            <header class="bg-blue-800 text-white p-3 rounded-t-lg flex justify-between items-center">
+                <h3 class="font-semibold text-base">Library Assistant</h3>
+            </header>
+            <div id="chat-messages" class="flex-grow p-4 overflow-y-auto bg-slate-50 dark:bg-gray-900"></div>
+            <footer class="p-2 border-t border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800 rounded-b-lg">
+                <form id="chat-form" class="flex items-center">
+                    <input id="chat-input" type="text" placeholder="Ask anything..." class="flex-grow px-3 py-2 text-sm border border-slate-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-slate-900 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" autocomplete="off">
+                    <button type="submit" class="ml-2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.428A1 1 0 0011 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+                    </button>
+                </form>
+            </footer>
+        </div>
+        <button id="chat-toggle-btn" class="w-16 h-16 bg-blue-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all">
+            <svg id="chat-icon-open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.083-3.083A6.984 6.984 0 012 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM4.832 14.168L5.5 12.121A5.006 5.006 0 004 10c0-2.761 2.686-5 6-5s6 2.239 6 5-2.686 5-6 5a6.839 6.839 0 01-2.21-.36l-2.96 1.05z" clip-rule="evenodd" /></svg>
+            <svg id="chat-icon-close" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js', v='2.0') }}"></script>
+
+</body>
+</html>

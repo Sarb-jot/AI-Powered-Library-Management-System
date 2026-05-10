@@ -1,0 +1,10 @@
+Flask==3.1.0
+mysql-connector-python==9.1.0
+fpdf2==2.8.2
+requests==2.32.3
+pyserial==3.5
+joblib==1.4.2
+pandas==2.2.3
+scikit-learn==1.6.0
+numpy==2.2.1
+google-generativeai==0.8.3

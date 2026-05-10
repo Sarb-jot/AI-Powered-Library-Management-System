@@ -1,0 +1,103 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --bg-color: #f4f7f9;
+    --container-bg: #ffffff;
+    --text-color: #333;
+    --error-color: #e74c3c;
+    --success-color: #43a06a;
+    --border-color: #e0e0e0;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+.container {
+    background-color: var(--container-bg);
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 800px;
+}
+header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+h1, h2, h3 { color: var(--secondary-color); }
+h1 { font-size: 1.8em; margin: 0; }
+h2 { font-size: 1.5em; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+h3 { font-size: 1.2em; color: var(--primary-color); }
+.hidden { display: none !important; }
+input[type="text"], input[type="password"] {
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1em;
+}
+button {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 5px;
+    transition: background-color 0.3s;
+}
+button:hover { background-color: #2980b9; }
+#logout-btn, .back-btn {
+    background-color: #95a5a6;
+}
+#logout-btn:hover, .back-btn:hover {
+    background-color: var(--secondary-color);
+}
+.error-message { color: var(--error-color); font-size: 0.9em; }
+.status-message { margin-top: 15px; font-weight: bold; }
+.actions { margin: 20px 0; }
+#current-books-list, #history-books-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+.book-entry {
+    background-color: var(--bg-color);
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid var(--primary-color);
+}
+.book-entry strong { display: block; font-size: 1.1em; }
+#qr-reader {
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 400px;
+}
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: var(--primary-color);
+    margin: 20px auto;
+    animation: spin 1s ease infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
